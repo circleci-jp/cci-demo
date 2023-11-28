@@ -65,6 +65,9 @@
     "lint": "eslint src",
     "start": "node scripts/start.js",
     "build": "node scripts/build.js",
+    "prepare": "husky install",
+    "format": "prettier --list-different src",
+    "lint-staged": "lint-staged --allow-empty",
     "test": "node scripts/test.js"
   },
   "eslintConfig": {
