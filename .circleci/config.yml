@@ -25,7 +25,25 @@ jobs:
                 path: ~/junit
             - store_artifacts:
                 path: ~/junit
+  deploy:
+    docker:
+      - image: cimg/node:lts
+    steps:
+      - run: 
+          name: Deployment
+          command: |
+            echo "The app was shipped!" 
+
 workflows:
     build-and-test:
       jobs:
         - build-and-test
+        - hold: # hold というジョブ名は固定で、メインの設定（上部の jobs 部分）に入れないようにしてください。
+            type: approval # 承認ジョブを表示。
+            requires:
+              - build
+      - deploy:
+          context: approvers # 制限付きコンテキストを参照。
+          requires:
+            - hold
+            
