@@ -4,7 +4,7 @@ orbs:
     node: circleci/node@5.1.0
 
 jobs:
-    build:
+    build-and-test:
         docker: # image to run on
             - image: cimg/node:21.2
         parallelism: 3 # nodes to split test suite over
@@ -25,9 +25,23 @@ jobs:
                 path: ~/junit
             - store_artifacts:
                 path: ~/junit
+    notify-approval:
+        docker:
+            - image: cimg/base:2023.11
+        steps:
+            - run: 
+                name: Notify to the Approver
+                command: |
+                    if [ -z "$APPROVER_EMAIL" ]; then
+                        echo "Project settings > Environment Variables に承認者のメールアドレスを変数 APPROVER_EMAIL として登録してください。"
+                    else
+                        echo "$APPROVER_EMAIL"
+                    fi
+            
+    
     deploy:
         docker:
-            - image: cimg/node:lts
+            - image: cimg/base:2023.11
         steps:
             - run: 
                 name: Deployment
@@ -37,11 +51,14 @@ jobs:
 workflows:
     build-and-deploy:
         jobs:
-            - build
+            - build-and-test
+            - notify-approval
+                requires:
+                    - build-and-test
             - hold: # hold というジョブ名は固定で、メインの設定（上部の jobs 部分）に入れないようにしてください。
                 type: approval # 承認ジョブを表示。
                 requires:
-                    - build
+                    - build-and-test
             - deploy:
                 requires:
                     - hold
