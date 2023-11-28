@@ -52,7 +52,7 @@ workflows:
     build-and-deploy:
         jobs:
             - build-and-test
-            - notify-approval
+            - notify-approval:
                 requires:
                     - build-and-test
             - hold: # hold というジョブ名は固定で、メインの設定（上部の jobs 部分）に入れないようにしてください。
