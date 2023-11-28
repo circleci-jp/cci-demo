@@ -35,7 +35,7 @@ jobs:
                     if [ -z "$APPROVER_EMAIL" ]; then
                         echo "Project settings > Environment Variables に承認者のメールアドレスを変数 APPROVER_EMAIL として登録してください。"
                     else
-                        echo "$APPROVER_EMAIL"
+                        echo "承認者のメールアドレスは $APPROVER_EMAIL です。"
                     fi
             
     
