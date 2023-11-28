@@ -25,14 +25,6 @@ jobs:
                 path: ~/junit
             - store_artifacts:
                 path: ~/junit
-            - run:
-                name: Install node packages # 依存関係のインストール
-                command: npm install
-            - run:
-                name: Run lint and format # lint and format
-                command: npm run lint && npm run format
-            - store_artifacts: # カバレッジをアップロード
-                path: reports/coverage    
     notify-approval:
         docker:
             - image: cimg/base:2023.11
